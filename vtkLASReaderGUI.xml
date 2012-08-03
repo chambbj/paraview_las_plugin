@@ -1,0 +1,6 @@
+<ParaViewReaders>
+  <Reader name="LASReader"
+          extensions="las"
+          file_description="LAS Files">
+  </Reader>
+</ParaViewReaders>

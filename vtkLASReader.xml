@@ -1,0 +1,29 @@
+<ServerManagerConfiguration>
+  <ProxyGroup name="sources">
+   <SourceProxy name="LASReader" 
+                class="vtkLASReader"
+                label="LAS reader">
+     <Documentation
+       short_help="Read a LAS file."
+       long_help="Read a LAS file into an image data.">
+       The LAS reader reads LAS files, and the output is a point cloud dataset. The default file extension is .las.
+     </Documentation>
+     <StringVectorProperty
+        name="FileName"
+        animateable="0"
+        command="SetFileName"
+        number_of_elements="1">
+        <FileListDomain name="files"/>
+        <Documentation>
+          This property specifies the file name for the LAS reader.
+        </Documentation>
+     </StringVectorProperty>
+     <Hints>
+       <ReaderFactory extensions="las"
+                      file_description="LAS File Format" />
+     </Hints>
+   <!-- End LASReader -->
+   </SourceProxy>
+  </ProxyGroup>
+</ServerManagerConfiguration>
+
