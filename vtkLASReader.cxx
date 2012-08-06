@@ -30,13 +30,10 @@
 
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
-//#include "vtkNew.h"
 #include "vtkObjectFactory.h"
-//#include "vtkPointData.h"
-//#include "vtkPoints.h"
 #include "vtkPolyData.h"
 #include "vtkSmartPointer.h"
-//#include "vtkStreamingDemandDrivenPipeline.h"
+#include "vtkVertexGlyphFilter.h"
 
 #include <liblas/liblas.hpp>
 
@@ -87,7 +84,7 @@ int vtkLASReader::RequestData(
 
   vtkIdType nr_points = header.GetPointRecordsCount();
 
-//  vtkPoints *points = vtkPoints::New();
+  vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
   vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
   points->SetDataTypeToFloat();
   points->SetNumberOfPoints(nr_points);
@@ -100,8 +97,14 @@ int vtkLASReader::RequestData(
     points->SetPoint(i, point);
     }
 
-  output->SetPoints(points);
-//  points->Delete();
+  polydata->SetPoints(points);
+
+  vtkSmartPointer<vtkVertexGlyphFilter> vertexGlyphFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
+  vertexGlyphFilter->AddInputData(polydata);
+  vertexGlyphFilter->Update();
+
+  output->ShallowCopy(vertexGlyphFilter->GetOutput());
+  
   return 1;
 }
 
