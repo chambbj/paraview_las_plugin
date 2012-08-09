@@ -19,7 +19,7 @@
         </Documentation>
      </StringVectorProperty>
      <Hints>
-       <ReaderFactory extensions="las"
+       <ReaderFactory extensions="las laz"
                       file_description="LAS File Format" />
      </Hints>
    <!-- End LASReader -->
