@@ -82,7 +82,9 @@ $ cd build
 $ ccmake ..
 ```
 
-**Note:** Make sure that `WITH_GDAL` and `WITH_GEOTIFF` are set to `ON` (default is `OFF`). Hitting `'c'` followed by `'g'` will configure and generate all files for the build process. Running
+**Note:** Make sure that `WITH_GDAL` and `WITH_GEOTIFF` are set to `ON` (default is `OFF`). If building with optional LASzip support, also set `WITH_LASZIP` to `ON` (default is `OFF`).
+
+Hitting `'c'` followed by `'g'` will configure and generate all files for the build process. Running
 
 ```
 $ make
