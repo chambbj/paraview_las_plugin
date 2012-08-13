@@ -31,13 +31,39 @@ $ make
 
 will build ParaView as well as all the submodules (such as VTK). Optionally, you can specify `-jN`, e.g., make `-j4` to speed up the compilation process by using more cores.
 
+### (Optional) Download and build LASzip
+
+To add support for LASzip compressed data, download the LASzip 2.1.0 source [tarball](http://download.osgeo.org/laszip/laszip-2.1.0.tar.gz). To compile LASzip, unpack the tarball, i.e.,
+
+```
+tar xvfz laszip-2.1.0.tar.gz
+cd laszip-2.1.0
+```
+
+Next, create a build directory and call `ccmake` to enter a graphical user interface for changing cmake variables. Alternatively, you can also set the variables on the command line.
+
+```
+$ mkdir build
+$ cd build
+$ ccmake ..
+```
+
+Hitting `'c'` followed by `'g'` will configure and generate all files for the build process. Running
+
+```
+$ make
+$ make install
+```
+
+will build LASzip and install it on your system.
+
 ### Download and build libLAS
 
 Download the libLAS 1.7.0 source [tarball](http://download.osgeo.org/liblas/libLAS-1.7.0.tar.gz) and follow the [build instructions](http://www.liblas.org/compilation.html) to compile libLAS. First, unpack the tarball, i.e.,
 
 ```
-$ tar xvfz libLAS-1.7.0-src.tar.gz
-$ cd libLAS-1.7.0-src
+$ tar xvfz libLAS-1.7.0.tar.gz
+$ cd libLAS-1.7.0
 ```
 
 For now, we assume the user has the following libLAS dependencies installed.
