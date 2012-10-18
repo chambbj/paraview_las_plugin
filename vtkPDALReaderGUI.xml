@@ -1,0 +1,6 @@
+<ParaViewReaders>
+  <Reader name="PDALReader"
+          extensions="las laz"
+          file_description="PDAL Files">
+  </Reader>
+</ParaViewReaders>

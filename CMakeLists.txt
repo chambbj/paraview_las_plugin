@@ -32,16 +32,50 @@ if(PARAVIEW_BUILD_QT_GUI)
                         ${CMAKE_CURRENT_SOURCE_DIR}
     )
       
-    if(${CMAKE_VERSION} VERSION_LESS 2.8.7 AND NOT WIN32)
-      include(Qt4Macros-CMake2.8.7)
-    endif()
+#    if(${CMAKE_VERSION} VERSION_LESS 2.8.7 AND NOT WIN32)
+#      include(Qt4Macros-CMake2.8.7)
+#    endif()
   ENDIF(QT4_FOUND)
 ENDIF(PARAVIEW_BUILD_QT_GUI)
 
-find_package(libLAS 1.6 REQUIRED)
+# Path to additional CMake modules
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 
+find_package(libLAS 1.6 REQUIRED)
 include_directories(${LIBLAS_INCLUDE_DIRS})
 add_definitions(${LIBLAS_DEFINITIONS})
+
+find_package(PDAL REQUIRED)
+include_directories(${PDAL_INCLUDE_DIRS})
+
+#------------------------------------------------------------------------------
+# settings for Boost dependencies
+#------------------------------------------------------------------------------
+
+if(WIN32 AND MSVC)
+    set(Boost_USE_STATIC_LIBS    ON)
+endif()
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
+find_package( Boost 1.44 COMPONENTS filesystem system REQUIRED )
+
+if( Boost_FOUND )
+   include_directories(${Boost_INCLUDE_DIRS})   
+endif()
+
+# make these available for the user to set.
+mark_as_advanced(CLEAR Boost_INCLUDE_DIR) 
+mark_as_advanced(CLEAR Boost_LIBRARY_DIRS) 
+link_directories(${Boost_LIBRARY_DIRS}) 
+
+if(Boost_FOUND 
+    AND Boost_INCLUDE_DIRS 
+    AND Boost_LIBRARIES)
+    
+    list(APPEND CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIRS})
+    list(APPEND CMAKE_REQUIRED_LIBRARIES ${Boost_LIBRARIES})
+endif()
+
 
 set(LAS_READER_LIB_NAME vtkLASReader)
 ADD_PARAVIEW_PLUGIN(${LAS_READER_LIB_NAME} "1.0"
@@ -51,3 +85,12 @@ ADD_PARAVIEW_PLUGIN(${LAS_READER_LIB_NAME} "1.0"
   )
 
 target_link_libraries(${LAS_READER_LIB_NAME} ${LIBLAS_LIBRARY} ${VTK_LIBRARIES})
+
+set(PDAL_READER_LIB_NAME vtkPDALReader)
+ADD_PARAVIEW_PLUGIN(${PDAL_READER_LIB_NAME} "1.0"
+  SERVER_MANAGER_XML vtkPDALReader.xml
+  SERVER_MANAGER_SOURCES vtkPDALReader.cxx
+  GUI_RESOURCE_FILES vtkPDALReaderGUI.xml
+  )
+
+target_link_libraries(${PDAL_READER_LIB_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${PDAL_LIBRARY} ${VTK_LIBRARIES})

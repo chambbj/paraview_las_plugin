@@ -1,0 +1,29 @@
+<ServerManagerConfiguration>
+  <ProxyGroup name="sources">
+   <SourceProxy name="PDALReader" 
+                class="vtkPDALReader"
+                label="PDAL reader">
+     <Documentation
+       short_help="Read a PDAL-supported file."
+       long_help="Read a PDAL-supported file into an image data.">
+       The PDAL reader reads LAS files, and the output is a point cloud dataset. The default file extension is .las.
+     </Documentation>
+     <StringVectorProperty
+        name="FileName"
+        animateable="0"
+        command="SetFileName"
+        number_of_elements="1">
+        <FileListDomain name="files"/>
+        <Documentation>
+          This property specifies the file name for the PDAL reader.
+        </Documentation>
+     </StringVectorProperty>
+     <Hints>
+       <ReaderFactory extensions="las laz"
+                      file_description="PDAL File Formats" />
+     </Hints>
+   <!-- End PDALReader -->
+   </SourceProxy>
+  </ProxyGroup>
+</ServerManagerConfiguration>
+

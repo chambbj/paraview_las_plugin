@@ -28,6 +28,8 @@
 
 #include "vtkLASReader.h"
 
+#include <fstream>
+
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
@@ -100,7 +102,11 @@ int vtkLASReader::RequestData(
   polydata->SetPoints(points);
 
   vtkSmartPointer<vtkVertexGlyphFilter> vertexGlyphFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
+#if VTK_MAJOR_VERSION <= 5
+  vertexGlyphFilter->AddInput(polydata);
+#else
   vertexGlyphFilter->AddInputData(polydata);
+#endif
   vertexGlyphFilter->Update();
 
   output->ShallowCopy(vertexGlyphFilter->GetOutput());
